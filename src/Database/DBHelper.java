@@ -262,8 +262,8 @@ public class DBHelper {
 			    randPercent = Math.round(randPercent * 10000.0)/ 10000.0;
                 double newPrice = (price * randPercent) + price;
                 
-                //calculate days in between old date and new date
-                //loop that many times and update prices
+                rs.updateDate("Date", newDate);
+                rs.updateDouble("Price", newPrice);
                 
                 //update price in table
             }
@@ -311,7 +311,8 @@ public class DBHelper {
                 }
                 
                 //update table
-                //missing, needs to be finished
+                rs.updateDouble("price", newPrice);
+                rs.updateDouble("yield", newYield);
 
             }
         } catch (SQLException e) {

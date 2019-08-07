@@ -59,11 +59,13 @@ public class StockMarket extends Market {
 		return true;
 	}
 	
-	public void updatePrices() throws SQLException{
+	public void updatePrices(Date date) throws SQLException{
 		Iterator<Stock> iter = stockMarket.iterator();
 		DBHelper helper = new DBHelper();
+
+		Date date1= new java.sql.Date(date.getTime());
 		//Needs to be written, will be like getAllStock method but void
-		helper.updateStockMarket();
+		helper.updateStockMarket(date1);
 		
 		while(iter.hasNext()) {
 			double randPercent = ThreadLocalRandom.current().nextDouble(-0.05, 0.05);

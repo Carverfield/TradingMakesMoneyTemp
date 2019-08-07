@@ -1,17 +1,14 @@
 package model;//package TradingMakesMoney;
 
-import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.*;
 import Database.DBHelper;
 import java.sql.SQLException;
 
 public class BondMarket extends Market {
-	private ArrayList<Bond> bondMarket = new ArrayList<Bond>();
 	
 	BondMarket(double tf) {
 		super(tf);
-		bondMarket = new ArrayList<Bond>();
 	}
 	
 	public boolean addBond(Bond toAdd) throws SQLException{
@@ -26,7 +23,6 @@ public class BondMarket extends Market {
 		double yield = toAdd.getYield();
 		//Needs to be written
 		helper.addMarketBond(companyName, type, yield, price, bondID);
-		bondMarket.add(toAdd);
 		return true;
 	}
 	
@@ -38,7 +34,6 @@ public class BondMarket extends Market {
 		String bondID = toAdd.getID();
 		//needs to be written
 		helper.removeMarketBond(bondID);
-		bondMarket.remove(toRemove);
 		return true;
 	}
 
@@ -49,30 +44,24 @@ public class BondMarket extends Market {
 		DBHelper helper = new DBHelper();
 		//needs to be written
 		helper.removeMarketBond(bondID);
-		bondMarket.remove(toRemove);
 		return true;
 	}
 	
 	public boolean hasBond(Bond toCheck) {
-		Iterator<Bond> iter = bondMarket.iterator();
-		
-		while (iter.hasNext()) {
-			Bond ex = iter.next();
-			if(ex.equals(toCheck)) {
-				return true;
-			}
+		DBHelper helper = new DBHelper();
+		String bondID = toCheck.getID();
+
+		if(helper.marketHasBond(bondID)) {
+			return true;
 		}
 		return false;
 	}
 
 	public boolean hasBond(String bondID) {
-		terator<Bond> iter = bondMarket.iterator();
+		DBHelper helper = new DBHelper();
 		
-		while (iter.hasNext()) {
-			Bond ex = iter.next();
-			if(ex.getID().equals(toCheck)) {
-				return true;
-			}
+		if(helper.marketHasBond(bondID)) {
+			return true;
 		}
 		return false;
 	}
