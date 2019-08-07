@@ -26,6 +26,15 @@ public class BondMarket extends Market {
 		return true;
 	}
 	
+	public boolean removeBond(String bondID) throws SQLException{
+		if (!this.hasBond(bondID)) {
+			return false;
+		}
+		DBHelper helper = new DBHelper();
+		helper.removeMarketBond(bondID);
+		return true;
+	}
+	
 	public boolean hasBond(Bond toCheck) throws SQLException{
 		DBHelper helper = new DBHelper();
 		String bondID = toCheck.getID();
@@ -64,6 +73,7 @@ public class BondMarket extends Market {
 	
 	public void updatePrices() throws SQLException{
 		DBHelper helper = new DBHelper();
+		helper.updateBondMarket();
 	}
 
 }

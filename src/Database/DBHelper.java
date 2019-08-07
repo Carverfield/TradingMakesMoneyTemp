@@ -70,6 +70,34 @@ public class DBHelper {
             e.printStackTrace();
         }
     }
+    
+    public static void removeMarketStock(String ticker) throws SQLException {
+    	try {
+    		Connection conn = DB.getConnection();
+    		String sql = "delete from stockMarket where Ticker = ?";
+    		PreparedStatement ptmt = conn.prepareStatement(sql);
+    		ptmt.setString(3, ticker);
+    		
+    		ptmt.execute();
+    				
+    	} catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public static void removeMarketBond(String bondID) throws SQLException{
+    	try {
+    		Connection conn = DB.getConnection();
+    		String sql = "delete from bondMarket where bondID = ?";
+    		PreparedStatement ptmt = conn.prepareStatement(sql);
+    		ptmt.setString(5, bondID);
+    		
+    		ptmt.execute();
+    				
+    	} catch(SQLException e) {
+    		e.printStackTrace();
+    	}
+    }
 
      /**
      * Will return a copy of the bond that represents the bondID

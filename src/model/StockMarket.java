@@ -7,11 +7,9 @@ import java.lang.Math;
 import java.sql.SQLException;
 
 public class StockMarket extends Market {
-	private ArrayList<Stock> stockMarket;
 	
 	StockMarket(double tf) {
 		super(tf);
-		stockMarket = new ArrayList<Stock>();
 	}
 	
 	public boolean addStock(Stock toAdd, Date date) throws SQLException{
@@ -28,26 +26,25 @@ public class StockMarket extends Market {
 		//Needs to be written
 		helper.addMarketStock((java.sql.Date)date1, companyName, ticker, price);
 
-		stockMarket.add(toAdd);
+		return true;
+	}
+	
+	public boolean removeStock(String ticker) throws SQLException{
+		if(this.hasStock(ticker)) {
+			return false;
+		}
+		DBHelper helper = new DBHelper();
+		helper.removeMarketStock(ticker);
+		
 		return true;
 	}
 	
 	
 	public void updatePrices(Date date) throws SQLException{
-		Iterator<Stock> iter = stockMarket.iterator();
 		DBHelper helper = new DBHelper();
 
 		Date date1= new java.sql.Date(date.getTime());
-		//Needs to be written, will be like getAllStock method but void
 		helper.updateStockMarket((java.sql.Date) date1);
-		
-		while(iter.hasNext()) {
-			double randPercent = ThreadLocalRandom.current().nextDouble(-0.05, 0.05);
-			randPercent = Math.round(randPercent * 10000.0)/ 10000.0;
-			Stock toUpdate = iter.next();
-			double newPrice = (toUpdate.getPrice() * randPercent) + toUpdate.getPrice();
-			toUpdate.updatePrice(newPrice); 
-		}
 		
 	}
 
