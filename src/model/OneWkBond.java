@@ -6,7 +6,7 @@ public class OneWkBond extends Bond{
 	private int numDays;
 	private Date maturityDate;
 	
-	OneWkBond(String name, String b, double p, double ir) {
+	public OneWkBond(String name, String b, double p, double ir) {
 		super(name, b, p, ir);
 		numDays = 7;
 		Calendar c = Calendar.getInstance();

@@ -57,7 +57,7 @@ public class BondMarket extends Market {
 		return helper.getMarketBond(bondID);
 	}
 
-	public Bond getBond(String toGet) {
+	public Bond getBond(String toGet) throws SQLException{
 		DBHelper helper = new DBHelper();
 		return helper.getMarketBond(toGet);
 	}

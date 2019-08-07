@@ -8,8 +8,8 @@ public class ThreeMonthBond extends Bond{
 	private int numMonth;
 	private Date maturityDate;
 	
-	ThreeMonthBond(String name, double p, double ir) {
-		super(name, p, ir);
+	public ThreeMonthBond(String name, String b, double p, double ir) {
+		super(name, b, p, ir);
 		numMonth = 3;
 		Calendar c = Calendar.getInstance();
 		c.setTime(this.getPurchaseDate());

@@ -6,7 +6,7 @@ public class OneMonthBond extends Bond{
 	private int numMonth;
 	private Date maturityDate;
 	
-	OneMonthBond(String name, String b, double p, double ir) {
+	public OneMonthBond(String name, String b, double p, double ir) {
 		super(name, b, p, ir);
 		numMonth = 1;
 		Calendar c = Calendar.getInstance();

@@ -1,6 +1,7 @@
 package Database;
 
 import java.sql.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import model.*;
 
@@ -31,7 +32,7 @@ public class DBHelper {
         }
     }
 
-    public static void addMarketStock(Date date, String companyName, String ticker, int price) throws SQLException{
+    public static void addMarketStock(Date date, String companyName, String ticker, double price) throws SQLException{
         try {
             Connection conn = DB.getConnection();
             statement = conn.createStatement();
@@ -75,8 +76,62 @@ public class DBHelper {
      * If the market doesn't contain that bond, it will return an empty bond.
      */
     public static Bond getMarketBond(String bondID) throws SQLException{
-        
-        return new OneWkBond("Empty", 0, 0);
+    	try {
+            Connection conn = DB.getConnection();
+            statement = conn.createStatement();
+            String sql = "select * from bondMarket";
+            PreparedStatement ptmt = conn.prepareStatement(sql);
+            ResultSet rs = ptmt.executeQuery();
+            while(rs.next()){
+               String toComp = rs.getString("bondID");
+               double yield = rs.getDouble("yield");
+               double price = rs.getDouble("price");
+               String name = rs.getString("companyName");
+               String type = rs.getString("type");
+               
+               
+               if (toComp.equals(bondID)) {
+            	   if(type.equalsIgnoreCase("OneWkBond")) {
+                	   return new model.OneWkBond(name, bondID, price, yield);
+                   }
+                   else if (type.equalsIgnoreCase("OneMonthBond")) {
+                	   return new model.OneMonthBond(name, bondID, price, yield);
+                   }
+                   else {
+                	   return new model.ThreeMonthBond(name, bondID, price, yield);
+                   }
+               }
+            }
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+        return new model.OneWkBond("empty", "empty", 0.0, 0.0);
+    }
+    
+    public static Stock getMarketStock(String ticker) throws SQLException{
+    	try {
+            Connection conn = DB.getConnection();
+            statement = conn.createStatement();
+            String sql = "select * from stockMarket";
+            PreparedStatement ptmt = conn.prepareStatement(sql);
+            ResultSet rs = ptmt.executeQuery();
+            while(rs.next()){
+               String toComp = rs.getString("Ticker");
+               double price = rs.getDouble("Price");
+               String name = rs.getString("CompanyName");
+               Date date = rs.getDate("Date");
+               
+               
+               if (toComp.equals(ticker)) {
+            	   return new model.Stock(ticker, name, price);
+               }
+            }
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	
+        return new model.Stock("empty", "empty", 0.0);
     }
 
     public static void addInvestorTransaction(String buyOrSell, String ticker, String companyName, double price, int numShare, Date date, double benefit) throws SQLException {
@@ -261,7 +316,7 @@ public class DBHelper {
             PreparedStatement ptmt = conn.prepareStatement(sql);
             ResultSet rs = ptmt.executeQuery();
             while(rs.next()){
-                date = rs.getDate("Date")
+                date = rs.getDate("Date");
                 companyName = rs.getString("CompanyName");
                 ticker = rs.getString("Ticker");
                 price = rs.getDouble("Price");
@@ -349,10 +404,6 @@ public class DBHelper {
         return false;
     }
 
-    public static Bond marketGetBond(String bondID) {
-        
-    }
-
     public static void updateStockMarket(Date newDate) throws SQLException {
         StringBuilder sb = new StringBuilder();
         Date date;
@@ -390,7 +441,7 @@ public class DBHelper {
 
     public static void updateBondMarket() throws SQLException {
         StringBuilder sb = new StringBuilder();
-        Date newDate = date;
+        Date newDate;
         String bondID;
         String companyName;
         double price;
@@ -410,7 +461,7 @@ public class DBHelper {
                 type = rs.getString("type");
                 yield = rs.getDouble("yield");
                 price = rs.getDouble("price");
-                buildID = rs.getString("buildID");
+                bondID = rs.getString("bondID");
 
                 //calculate new price and yield
                 double randPercent = ThreadLocalRandom.current().nextDouble(-0.05, 0.05);

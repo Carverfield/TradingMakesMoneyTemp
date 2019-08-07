@@ -63,7 +63,7 @@ public abstract class Bond {
 	}
 	
 	public boolean equals(Bond toComp) {
-		if(bondId.equals(toComp.getID())) {
+		if(bondID.equals(toComp.getID())) {
 			return true;
 		}
 		

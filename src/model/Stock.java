@@ -6,7 +6,7 @@ public class Stock {
 	private String name;
 	
 	
-	Stock(String t, String n, double p) {
+	public Stock(String t, String n, double p) {
 		ticker = t;
 		name = n;
 		price = p;

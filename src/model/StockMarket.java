@@ -19,32 +19,19 @@ public class StockMarket extends Market {
 			return false;
 		}
 		
-		Date date1= new java.sql.Date(date.getTime();
+		Date date1= new java.sql.Date(date.getTime());
 		String companyName = toAdd.getName();
 		String ticker = toAdd.getTicker();
-		double price = toAdd.getPrice;
+		double price = toAdd.getPrice();
 
 		DBHelper helper = new DBHelper();
 		//Needs to be written
-		helper.addMaketStock(date1, companyName, ticker, price);
+		helper.addMarketStock((java.sql.Date)date1, companyName, ticker, price);
 
 		stockMarket.add(toAdd);
 		return true;
 	}
 	
-	public boolean removeStock(String ticker) throws SQLException{
-		//Needs to be written
-		if(!this.hasStock(ticker)) {
-			return false;
-		}
-		DBHelper helper = new DBHelper();
-
-		//Neeeds to be written
-		helper.removeMarketStock(ticker);
-		stockMarket.remove(toRemove);
-
-		return true;
-	}
 	
 	public void updatePrices(Date date) throws SQLException{
 		Iterator<Stock> iter = stockMarket.iterator();
@@ -52,7 +39,7 @@ public class StockMarket extends Market {
 
 		Date date1= new java.sql.Date(date.getTime());
 		//Needs to be written, will be like getAllStock method but void
-		helper.updateStockMarket(date1);
+		helper.updateStockMarket((java.sql.Date) date1);
 		
 		while(iter.hasNext()) {
 			double randPercent = ThreadLocalRandom.current().nextDouble(-0.05, 0.05);
@@ -79,7 +66,7 @@ public class StockMarket extends Market {
 	
 	public boolean hasStock(Stock toCheck) throws SQLException{
 		DBHelper helper = new DBHelper();
-		String ticker = toCheck.getTicker;
+		String ticker = toCheck.getTicker();
 		if(helper.marketHasStock(ticker)) {
 			return true;
 		}
