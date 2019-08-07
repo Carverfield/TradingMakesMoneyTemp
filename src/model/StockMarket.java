@@ -32,19 +32,6 @@ public class StockMarket extends Market {
 		return true;
 	}
 	
-	public boolean removeStock(Stock toRemove) throws SQLException{
-		if(!this.hasStock(toRemove)) {
-			return false;
-		}
-		String ticker = toRemove.getTicker;
-		DBHelper helper = new DBHelper();
-
-		//Neeeds to be written
-		helper.removeMarketStock(ticker);
-		stockMarket.remove(toRemove);
-		return true;
-	}
-
 	public boolean removeStock(String ticker) throws SQLException{
 		//Needs to be written
 		if(!this.hasStock(ticker)) {
@@ -76,40 +63,25 @@ public class StockMarket extends Market {
 		}
 		
 	}
-	
-	//Prints all stocks and their prices
-	public void printStocks() {
-		Iterator<Stock> iter = stockMarket.iterator();
-		
-		while(iter.hasNext()) {
-			Stock ex = iter.next();
-			System.out.println(ex.getTicker() + ", $" + ex.getPrice());
-		}
-	}
 
-	//public String getAllStocks(){}
+	public String getAllStock(){
+		DBHelper helper = new DBHelper();
+		return helper.getAllMarketStock();
+	}
 	
-	public boolean hasStock(String ticker) {
-		Iterator<Stock> iter = stockMarket.iterator();
-		
-		while(iter.hasNext()) {
-			Stock ex = iter.next();
-			if (ex.getTicker().equalsIgnoreCase(ticker)) {
-				return true;
-			}
+	public boolean hasStock(String ticker) throws SQLException{
+		DBHelper helper = new DBHelper();
+		if(helper.marketHasStock(ticker)) {
+			return true;
 		}
 		return false;
 	}
 	
-	public boolean hasStock(Stock toCheck) {
-		Iterator<Stock> iter = stockMarket.iterator();
-		String ticker = toCheck.getTicker();
-		
-		while(iter.hasNext()) {
-			Stock ex = iter.next();
-			if (ex.getTicker().equalsIgnoreCase(ticker)) {
-				return true;
-			}
+	public boolean hasStock(Stock toCheck) throws SQLException{
+		DBHelper helper = new DBHelper();
+		String ticker = toCheck.getTicker;
+		if(helper.marketHasStock(ticker)) {
+			return true;
 		}
 		return false;
 		

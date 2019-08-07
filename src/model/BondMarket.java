@@ -26,28 +26,7 @@ public class BondMarket extends Market {
 		return true;
 	}
 	
-	public boolean removeBond(Bond toRemove) throws SQLException{
-		if(!this.hasBond(toRemove)) {
-			return false;
-		}
-		DBHelper helper = new DBHelper();
-		String bondID = toAdd.getID();
-		//needs to be written
-		helper.removeMarketBond(bondID);
-		return true;
-	}
-
-	public boolean removeBond(String bondID) throws SQLException{
-		if(!this.hasBond(bondID)) {
-			return false;
-		}
-		DBHelper helper = new DBHelper();
-		//needs to be written
-		helper.removeMarketBond(bondID);
-		return true;
-	}
-	
-	public boolean hasBond(Bond toCheck) {
+	public boolean hasBond(Bond toCheck) throws SQLException{
 		DBHelper helper = new DBHelper();
 		String bondID = toCheck.getID();
 
@@ -57,7 +36,7 @@ public class BondMarket extends Market {
 		return false;
 	}
 
-	public boolean hasBond(String bondID) {
+	public boolean hasBond(String bondID) throws SQLException{
 		DBHelper helper = new DBHelper();
 		
 		if(helper.marketHasBond(bondID)) {
@@ -66,58 +45,25 @@ public class BondMarket extends Market {
 		return false;
 	}
 	
-	public Bond getBond(Bond toGet) {
-		Iterator<Bond> iter = bondMarket.iterator();
+	public String getAllBond(){
+		DBHelper helper = new DBHelper();
+		return helper.getAllMarketBond();
+	}
+
+	public Bond getBond(Bond toGet) throws SQLException{
+		DBHelper helper = new DBHelper();
+		String bondID = toGet.getID();
 		
-		while (iter.hasNext()) {
-			Bond ex = iter.next();
-			if(ex.equals(toGet)) {
-				return ex;
-			}
-		}
-		return new OneWkBond("Empty", 0, 0);
+		return helper.getMarketBond(bondID);
 	}
 
 	public Bond getBond(String toGet) {
-		Iterator<Bond> iter = bondMarket.iterator();
-		
-		while (iter.hasNext()) {
-			Bond ex = iter.next();
-			if(ex.getID().equals(toGet)) {
-				return ex;
-			}
-		}
-		return new OneWkBond("Empty", 0, 0);
+		DBHelper helper = new DBHelper();
+		return helper.getMarketBond(toGet);
 	}
 	
 	public void updatePrices() throws SQLException{
-
 		DBHelper helper = new DBHelper();
-		helper.updateBondMarket();
-		//Needs to be written, will be like 
-
-
-		Iterator<Bond> iter = bondMarket.iterator();
-		
-		while (iter.hasNext()) {
-			double randPercent = ThreadLocalRandom.current().nextDouble(-0.05, 0.05);
-			randPercent = Math.round(randPercent * 10000.0)/ 10000.0;
-			Bond toUpdate = iter.next();
-			double newPrice = (toUpdate.getPrice() * randPercent) + toUpdate.getPrice();
-			double newYield = toUpdate.getYield();
-			
-			//if the percent change in price is negative, yield should go up and vice versa
-			if ((newYield - randPercent) <= 0) {
-				newYield = 0.01;
-			}
-			else {
-				newYield -= randPercent;
-			}
-			
-			toUpdate.updatePrice(newPrice);
-			toUpdate.updateYield(newYield);
-		}
-		
 	}
 
 }

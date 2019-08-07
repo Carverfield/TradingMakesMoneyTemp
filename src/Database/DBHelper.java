@@ -2,6 +2,8 @@ package Database;
 
 import java.sql.*;
 
+import model.*;
+
 /**
  * This is a helper class writig data into database.
  * GUI don't need to have read this class.
@@ -66,6 +68,15 @@ public class DBHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+     /**
+     * Will return a copy of the bond that represents the bondID
+     * If the market doesn't contain that bond, it will return an empty bond.
+     */
+    public static Bond getMarketBond(String bondID) throws SQLException{
+        
+        return new OneWkBond("Empty", 0, 0);
     }
 
     public static void addInvestorTransaction(String buyOrSell, String ticker, String companyName, double price, int numShare, Date date, double benefit) throws SQLException {
@@ -236,6 +247,112 @@ public class DBHelper {
         return sb.toString();
     }
 
+    public static String getAllMarketStock() {
+        StringBuilder sb = new StringBuilder();
+        Date date;
+        String companyName;
+        String ticker;
+        double price;
+
+        try {
+            Connection conn = DB.getConnection();
+            statement = conn.createStatement();
+            String sql = "select * from stockMarket";
+            PreparedStatement ptmt = conn.prepareStatement(sql);
+            ResultSet rs = ptmt.executeQuery();
+            while(rs.next()){
+                date = rs.getDate("Date")
+                companyName = rs.getString("CompanyName");
+                ticker = rs.getString("Ticker");
+                price = rs.getDouble("Price");
+                sb.append("date: " + date + ", companyName: " + companyName + ", ticker: " + ticker +
+                        ", price: " + price + ".\n");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    public static String getAllMarketBond() {
+        StringBuilder sb = new StringBuilder();
+        String companyName;
+        String type;
+        double yield;
+        double price;
+        String bondID;
+
+        try {
+            Connection conn = DB.getConnection();
+            statement = conn.createStatement();
+            String sql = "select * from bondMarket";
+            PreparedStatement ptmt = conn.prepareStatement(sql);
+            ResultSet rs = ptmt.executeQuery();
+            while(rs.next()){
+                companyName = rs.getString("companyName");
+                type = rs.getString("type");
+                yield = rs.getDouble("yield");
+                price = rs.getDouble("price");
+                bondID = rs.getString("bondID");
+                sb.append("companyName: " + companyName + ", type: " + type +
+                        ", yield: " + yield + ", price: " + price + ", bondID: " + bondID + ".\n");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+
+    public static boolean marketHasStock(String toCompTicker) throws SQLException {
+        try {
+            Connection conn = DB.getConnection();
+            statement = conn.createStatement();
+            String sql = "select * from stockMarket";
+            PreparedStatement ptmt = conn.prepareStatement(sql);
+            ResultSet rs = ptmt.executeQuery();
+            //Needs to be fixed.
+            while(rs.next()){
+                //get fields
+                String ticker = rs.getString("Ticker");
+
+                if(ticker.equals(toCompTicker)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public static boolean marketHasBond(String toCompBondID) throws SQLException {
+        try {
+            Connection conn = DB.getConnection();
+            statement = conn.createStatement();
+            String sql = "select * from bondMarket";
+            PreparedStatement ptmt = conn.prepareStatement(sql);
+            ResultSet rs = ptmt.executeQuery();
+            //Needs to be fixed.
+            while(rs.next()){
+                //get fields
+                String bondID = rs.getString("bondID");
+
+                if(bondID.equals(toCompBondID)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static Bond marketGetBond(String bondID) {
+        
+    }
+
     public static void updateStockMarket(Date newDate) throws SQLException {
         StringBuilder sb = new StringBuilder();
         Date date;
@@ -265,7 +382,6 @@ public class DBHelper {
                 rs.updateDate("Date", newDate);
                 rs.updateDouble("Price", newPrice);
                 
-                //update price in table
             }
         } catch (SQLException e) {
             e.printStackTrace();
