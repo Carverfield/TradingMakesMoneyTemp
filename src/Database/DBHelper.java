@@ -442,6 +442,8 @@ public class DBHelper {
         try {
             Connection conn = DB.getConnection();
             statement = conn.createStatement();
+            statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             String sql = "select * from stockMarket";
             PreparedStatement ptmt = conn.prepareStatement(sql);
             ResultSet rs = ptmt.executeQuery();
@@ -479,6 +481,8 @@ public class DBHelper {
         try {
             Connection conn = DB.getConnection();
             statement = conn.createStatement();
+            statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             String sql = "select * from bondMarket";
             PreparedStatement ptmt = conn.prepareStatement(sql);
             ResultSet rs = ptmt.executeQuery();
