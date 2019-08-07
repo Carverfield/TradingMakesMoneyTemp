@@ -74,30 +74,19 @@ public class StockMarket extends Market {
 		
 	}
 	
-	public Stock getStock(Stock toGet) {
-		Iterator<Stock> iter = stockMarket.iterator();
+	public Stock getStock(Stock toGet) throws SQLException{
+		DBHelper helper = new DBHelper();
 		String ticker = toGet.getTicker();
 		
-		while(iter.hasNext()) {
-			Stock ex = iter.next();
-			if (ex.getTicker().equalsIgnoreCase(ticker)) {
-				return ex;
-			}
-		}
-		return new Stock("EMPTY", "empty", 0.0);
+		return helper.getMarketStock(ticker);
 	}
 	
-	public Stock getStock(String ticker) {
-		Iterator<Stock> iter = stockMarket.iterator();
+	public Stock getStock(String ticker) throws SQLException{
+		DBHelper helper = new DBHelper();
 		
-		while(iter.hasNext()) {
-			Stock ex = iter.next();
-			if (ex.getTicker().equalsIgnoreCase(ticker)) {
-				return ex;
-			}
-		}
-		return new Stock("EMPTY", "empty", 0.0);
+		return helper.getMarketStock(ticker);
 	}
+	
 	
 }
 
