@@ -441,12 +441,10 @@ public class DBHelper {
 
         try {
             Connection conn = DB.getConnection();
-            statement = conn.createStatement();
-            statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);
             String sql = "select * from stockMarket";
-            PreparedStatement ptmt = conn.prepareStatement(sql);
-            ResultSet rs = ptmt.executeQuery();
+            ResultSet rs = stmt.executeQuery(sql);
             //Needs to be fixed.
             while(rs.next()){
                 //get fields
